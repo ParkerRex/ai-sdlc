@@ -29,11 +29,11 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
           if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ Invalid version format: $VERSION"
+            echo "ERROR: Invalid version format: $VERSION"
             echo "Version must follow semantic versioning (e.g., 1.2.3)"
             exit 1
           fi
-          echo "✅ Version format is valid: $VERSION"
+          echo "OK: Version format is valid: $VERSION"
 
       - name: Check if this is a duplicate release
         id: check
@@ -59,11 +59,11 @@ jobs:
 
           if [[ "$PYPI_EXISTS" == "true" && "$GITHUB_EXISTS" == "true" ]]; then
             echo "should-release=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Version $VERSION already exists on both PyPI and GitHub"
+            echo "WARNING: Version $VERSION already exists on both PyPI and GitHub"
             echo "This appears to be a duplicate release attempt"
           else
             echo "should-release=true" >> $GITHUB_OUTPUT
-            echo "✅ Proceeding with release for version $VERSION"
+            echo "OK: Proceeding with release for version $VERSION"
           fi
         env:
           GH_TOKEN: ${{ github.token }}
@@ -173,7 +173,7 @@ jobs:
       - name: Skip PyPI publish (already exists)
         if: steps.check-pypi.outputs.exists == 'true'
         run: |
-          echo "⚠️ Version ${{ steps.version.outputs.VERSION }} already exists on PyPI"
+          echo "WARNING: Version ${{ steps.version.outputs.VERSION }} already exists on PyPI"
           echo "This is likely a re-run of a previously successful release"
           echo "Skipping PyPI publish step"
 
@@ -236,7 +236,7 @@ jobs:
       - name: Skip GitHub release (already exists)
         if: steps.check-release.outputs.exists == 'true'
         run: |
-          echo "⚠️ GitHub release v${{ steps.version.outputs.VERSION }} already exists"
+          echo "WARNING: GitHub release v${{ steps.version.outputs.VERSION }} already exists"
           echo "This is likely a re-run of a previously successful release"
           echo "Skipping GitHub release creation step"
 
@@ -247,7 +247,7 @@ jobs:
     steps:
       - name: Skip duplicate release
         run: |
-          echo "🚫 Skipping release for version ${{ needs.validate.outputs.version }}"
+          echo "SKIP: Skipping release for version ${{ needs.validate.outputs.version }}"
           echo "This version already exists on both PyPI and GitHub"
           echo "If you need to update the release, please:"
           echo "1. Increment the version number in pyproject.toml"
@@ -255,5 +255,5 @@ jobs:
           echo "3. Create a new git tag with the new version"
           echo ""
           echo "Current release status:"
-          echo "- PyPI: ✅ Published"
-          echo "- GitHub: ✅ Released"
+          echo "- PyPI: Published"
+          echo "- GitHub: Released"

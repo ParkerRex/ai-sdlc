@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### 🔧 Technical Improvements
+### Bug Fixes
+
+- **Step file validation**: `aisdlc next` now validates that step files have content before advancing
+  - Empty or whitespace-only files are rejected with a clear error message
+  - Prevents accidentally advancing through steps with empty files
+  - Added `EmptyStepFileError` exception and `validate_step_file()` utility
+
+### Technical Improvements
 
 - **Proper CLI argument parsing**: Replaced manual `sys.argv` parsing with `argparse` using subparsers
   - Each command now has its own `--help` with detailed descriptions
@@ -33,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.3] - 2025-01-20
 
-### 🔄 File Naming Convention Update
+### File Naming Convention Update
 
 **Breaking Changes:**
 
@@ -42,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All 8 prompt files renamed: `0.idea.instructions.md`, `1.prd.instructions.md`, `2.prd-plus.instructions.md`, etc.
   - Maintains tool-agnostic approach while using consistent markdown-style naming convention
 
-### 🔧 Technical Improvements
+### Technical Improvements
 
 - **Updated all references**: Comprehensive update of all file references throughout the codebase
   - Updated `ai_sdlc/commands/init.py` and `ai_sdlc/commands/next.py`
@@ -55,13 +62,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated `.aisdlc` configuration to use new step naming pattern
   - Updated Mermaid diagrams to reflect new naming convention
 
-### 📚 Documentation Updates
+### Documentation Updates
 
 - **Updated README**: File structure documentation now shows `.instructions.md` extensions
 - **Updated CHANGELOG**: Migration guide references updated to new naming convention
 - **Updated CI/CD documentation**: GitHub Actions workflows updated for new file names
 
-### 📦 Migration Guide
+### Migration Guide
 
 Existing projects will continue to work, but to use the new naming convention:
 
@@ -69,7 +76,7 @@ Existing projects will continue to work, but to use the new naming convention:
 2. **Update file naming pattern**: Change from `{number}-{name}` to `{number}.{name}` format
 3. **Update any custom references**: If you have custom scripts referencing these files, update the extensions and naming pattern
 
-### 🎯 Benefits
+### Benefits
 
 - **Consistent naming**: Unified `{number}.{name}.instructions.md` pattern throughout the system
 - **Tool compatibility**: Maintains compatibility with all AI tools and development environments
@@ -78,7 +85,7 @@ Existing projects will continue to work, but to use the new naming convention:
 
 ## [0.6.2] - 2025-01-20
 
-### 🔧 Test Fixes
+### Test Fixes
 
 - **Fixed failing tests**: Corrected test assertions to match actual implementation behavior
   - Fixed `test_run_init` to expect `mkdir(exist_ok=True)` instead of `mkdir(parents=True, exist_ok=True)`
@@ -88,20 +95,20 @@ Existing projects will continue to work, but to use the new naming convention:
 
 ## [0.6.1] - 2025-01-20
 
-### 🔧 CI/CD Fixes
+### CI/CD Fixes
 
 - **Fixed GitHub environment requirement**: Commented out environment requirement in release workflow to avoid validation errors
 - **Updated PyPI setup documentation**: Added notes about optional environment configuration
 - **Workflow improvements**: Release workflow can now run without pre-existing GitHub environment
 
-### 📚 Documentation Updates
+### Documentation Updates
 
 - **Enhanced PyPI setup guide**: Clarified optional nature of GitHub environments
 - **Workflow troubleshooting**: Added guidance for environment setup
 
 ## [0.6.0] - 2025-01-20
 
-### 🔄 File Naming Convention Update
+### File Naming Convention Update
 
 **Breaking Changes:**
 
@@ -109,7 +116,7 @@ Existing projects will continue to work, but to use the new naming convention:
   - All 8 prompt files renamed: `0.idea.instructions.md`, `1.prd.instructions.md`, etc.
   - Maintains tool-agnostic approach while using markdown-style naming convention
 
-### 🔧 Technical Improvements
+### Technical Improvements
 
 - **Updated all references**: Comprehensive update of all file references throughout the codebase
   - Updated `ai_sdlc/commands/init.py` and `ai_sdlc/commands/next.py`
@@ -119,19 +126,19 @@ Existing projects will continue to work, but to use the new naming convention:
   - Fixed references in `4.systems-patterns.instructions.md` to `3.system-template.instructions.md`
   - Fixed references in `7.tests.instructions.md` to `5.tasks.instructions.md`
 
-### 📚 Documentation Updates
+### Documentation Updates
 
 - **Updated README**: File structure documentation now shows `.instructions.md` extensions
 - **Updated CHANGELOG**: Migration guide references updated to new naming convention
 
-### 📦 Migration Guide
+### Migration Guide
 
 Existing projects will continue to work, but to use the new naming convention:
 
 1. **Rename prompt files**: Change `.prompt.yml` to `.instructions.md` for all prompt files
 2. **Update any custom references**: If you have custom scripts referencing these files, update the extensions
 
-### 🎯 Benefits
+### Benefits
 
 - **Consistent naming**: Aligns with YAML-style naming conventions while maintaining Markdown content
 - **Tool compatibility**: Maintains compatibility with all AI tools and development environments
@@ -139,7 +146,7 @@ Existing projects will continue to work, but to use the new naming convention:
 
 ## [0.5.0] - 2025-06-02
 
-### 🎯 Major: Tool-Agnostic AI Integration
+### Major: Tool-Agnostic AI Integration
 
 **Breaking Changes:**
 
@@ -148,33 +155,33 @@ Existing projects will continue to work, but to use the new naming convention:
 - **Updated file naming**: Prompt files now use `.instructions.md` extension (e.g., `0.idea.instructions.md`)
 - **Simplified step names**: Steps now use single digits with dot separators (e.g., `0.idea`, `1.prd`) instead of zero-padded numbers
 
-### ✨ New Features
+### New Features
 
 - **Universal AI compatibility**: Works with any AI tool (Claude, ChatGPT, Cursor, Copilot, etc.)
 - **Flexible workflow**: Users can choose between CLI automation or manual prompt usage
 - **Improved user experience**: Clear instructions for using generated prompts with any AI assistant
 - **Better error handling**: More informative messages when files are missing or corrupted
 
-### 🔧 Technical Improvements
+### Technical Improvements
 
 - **Broader Python support**: Now supports Python 3.11+ (previously required 3.13+)
 - **Cleaner codebase**: Removed all tool-specific dependencies and references
 - **Updated documentation**: Comprehensive guide for using AI-SDLC with any AI tool
 - **Enhanced testing**: Updated test suite to work with the new tool-agnostic approach
 
-### 📚 Documentation Updates
+### Documentation Updates
 
 - **Tool-agnostic README**: Updated all documentation to remove Cursor-specific instructions
 - **Flexible usage guide**: Added examples for using AI-SDLC with different AI tools
 - **Simplified troubleshooting**: Removed tool-specific troubleshooting steps
 
-### 🗑️ Removed
+### Removed
 
 - **Cursor-specific files**: Removed `.cursor/` directory and Cursor configuration files
 - **Repomix integration**: Removed Repomix-related files and references
 - **Hardcoded AI agent calls**: Replaced with flexible prompt generation system
 
-### 📦 Migration Guide
+### Migration Guide
 
 Existing projects will continue to work, but to take advantage of the new features:
 
@@ -182,7 +189,7 @@ Existing projects will continue to work, but to take advantage of the new featur
 2. **Update step references**: Change step names from `01-idea` to `0.idea` format in any custom scripts
 3. **Choose your AI tool**: Use the generated prompts with your preferred AI assistant
 
-### 🎉 Benefits
+### Benefits
 
 - **No vendor lock-in**: Use any AI tool you prefer
 - **Easier setup**: No need to install or configure specific AI tools
@@ -191,7 +198,7 @@ Existing projects will continue to work, but to take advantage of the new featur
 
 ## [0.4.0] - 2025-01-03
 
-### 🚀 Major Features
+### Major Features
 
 - **8-step workflow**: Added new `07-tasks-plus` step for comprehensive task list review and handoff preparation
   - Inserted between existing `06-tasks` and `07-tests` (now `08-tests`)
@@ -202,7 +209,7 @@ Existing projects will continue to work, but to take advantage of the new featur
   - Supports any AI chat interface (Cursor, Claude, ChatGPT, VS Code with AI extensions, etc.)
   - Flexible usage: full CLI workflow OR prompts-only approach
 
-### 📖 Documentation & UX Improvements
+### Documentation & UX Improvements
 
 - **Enhanced README**: Complete restructure with professional appearance
   - Added badges for PyPI, license, Python version, and AI-powered status
@@ -212,11 +219,11 @@ Existing projects will continue to work, but to take advantage of the new featur
   - Improved Quick Start with numbered steps and clear instructions
   - Added workflow modes table and flexible usage options
 - **Updated Mermaid diagrams**: Show iteration loops and agent modes
-  - Steps 1-5: Connected to "💬 Iterate with AI Chat" node
-  - Steps 7-8: Connected to "🤖 Use AI Agent Mode" node
+  - Steps 1-5: Connected to "Iterate with AI Chat" node
+  - Steps 7-8: Connected to "Use AI Agent Mode" node
   - Visual representation of different interaction patterns
 
-### 🛠️ Developer Experience
+### Developer Experience
 
 - **Flexible usage options**:
   - **Option 1**: Full CLI workflow with `aisdlc` commands
@@ -226,7 +233,7 @@ Existing projects will continue to work, but to take advantage of the new featur
 - **Enhanced error messages**: Made all error messages tool-agnostic
 - **Updated configuration**: All `.aisdlc` files include new workflow diagrams
 
-### 🔧 Technical Changes
+### Technical Changes
 
 - Updated all prompt file references to include new `07-tasks-plus-prompt.md`
 - Renamed `07-tests.md` to `08-tests-prompt.md` throughout codebase
@@ -235,7 +242,7 @@ Existing projects will continue to work, but to take advantage of the new featur
 - Updated integration tests to handle 8-step workflow
 - Changed timeout variable names and messages to be tool-agnostic
 
-### 📦 Backward Compatibility
+### Backward Compatibility
 
 - **Fully backward compatible**: Existing projects continue to work
 - **Automatic migration**: System dynamically reads step configuration

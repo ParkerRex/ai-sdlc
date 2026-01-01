@@ -1,44 +1,21 @@
-version = "0.1.0"
-
-# ordered lifecycle steps
-steps = [
-  "0.idea",
-  "1.prd",
-  "2.prd-plus",
-  "3.system-template",
-  "4.systems-patterns",
-  "5.tasks",
-  "6.tasks-plus",
-  "7.tests"
-]
-
-slug_rule    = "kebab-case"
-template_dir = "templates"
-prompt_dir   = "prompts"
-active_dir   = "doing"
-done_dir     = "done"
-
-[mermaid]
-graph = """
-flowchart TD
-  I[0.idea]-->P1[1.prd]-->P2[2.prd-plus]-->A[3.system-template]
-  A-->SP[4.systems-patterns]-->T[5.tasks]-->TP[6.tasks-plus]-->TESTS[7.tests]
-
-  %% Iteration loop for steps 1-5
-  CHAT[💬 Iterate with AI Chat]
-  I -.-> CHAT
-  P1 -.-> CHAT
-  P2 -.-> CHAT
-  A -.-> CHAT
-  SP -.-> CHAT
-  CHAT -.-> I
-  CHAT -.-> P1
-  CHAT -.-> P2
-  CHAT -.-> A
-  CHAT -.-> SP
-
-  %% Agent mode for steps 7-8
-  AGENT[🤖 Use AI Agent Mode]
-  TP --- AGENT
-  TESTS --- AGENT
-"""
+{
+  "version": "0.1.0",
+  "steps": [
+    "0.idea",
+    "1.prd",
+    "2.prd-plus",
+    "3.system-template",
+    "4.systems-patterns",
+    "5.tasks",
+    "6.tasks-plus",
+    "7.tests"
+  ],
+  "slug_rule": "kebab-case",
+  "template_dir": "templates",
+  "prompt_dir": "prompts",
+  "active_dir": "doing",
+  "done_dir": "done",
+  "mermaid": {
+    "graph": "flowchart TD\n  I[0.idea]-->P1[1.prd]-->P2[2.prd-plus]-->A[3.system-template]\n  A-->SP[4.systems-patterns]-->T[5.tasks]-->TP[6.tasks-plus]-->TESTS[7.tests]\n\n  %% Iteration loop for steps 1-5\n  CHAT[Iterate with AI Chat]\n  I -.-> CHAT\n  P1 -.-> CHAT\n  P2 -.-> CHAT\n  A -.-> CHAT\n  SP -.-> CHAT\n  CHAT -.-> I\n  CHAT -.-> P1\n  CHAT -.-> P2\n  CHAT -.-> A\n  CHAT -.-> SP\n\n  %% Agent mode for steps 7-8\n  AGENT[Use AI Agent Mode]\n  TP --- AGENT\n  TESTS --- AGENT"
+  }
+}

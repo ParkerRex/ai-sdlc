@@ -12,14 +12,14 @@ from ai_sdlc.commands.status import run_status
 @pytest.fixture
 def setup_project(temp_project_dir: Path):
     """Set up a project with config."""
-    config_content = """
-version = "0.1.0"
-steps = ["0.idea", "1.prd", "2.prd-plus"]
-prompt_dir = "prompts"
-active_dir = "doing"
-done_dir = "done"
-"""
-    (temp_project_dir / ".aisdlc").write_text(config_content)
+    config_data = {
+        "version": "0.1.0",
+        "steps": ["0.idea", "1.prd", "2.prd-plus"],
+        "prompt_dir": "prompts",
+        "active_dir": "doing",
+        "done_dir": "done",
+    }
+    (temp_project_dir / ".aisdlc").write_text(json.dumps(config_data))
 
     utils.reset_root(temp_project_dir)
     yield temp_project_dir
@@ -60,10 +60,10 @@ def test_status_shows_progress_bar(setup_project: Path, capsys):
 
     captured = capsys.readouterr()
     # First two steps should be complete (index 0, 1)
-    assert "✅idea" in captured.out
-    assert "✅prd" in captured.out
+    assert "[x]idea" in captured.out
+    assert "[x]prd" in captured.out
     # Third step should be pending
-    assert "☐prd-plus" in captured.out
+    assert "[ ]prd-plus" in captured.out
 
 
 def test_status_first_step(setup_project: Path, capsys):
@@ -74,9 +74,9 @@ def test_status_first_step(setup_project: Path, capsys):
     run_status()
 
     captured = capsys.readouterr()
-    assert "✅idea" in captured.out
-    assert "☐prd" in captured.out
-    assert "☐prd-plus" in captured.out
+    assert "[x]idea" in captured.out
+    assert "[ ]prd" in captured.out
+    assert "[ ]prd-plus" in captured.out
 
 
 def test_status_last_step(setup_project: Path, capsys):
@@ -88,9 +88,9 @@ def test_status_last_step(setup_project: Path, capsys):
 
     captured = capsys.readouterr()
     # All steps should be complete
-    assert "✅idea" in captured.out
-    assert "✅prd" in captured.out
-    assert "✅prd-plus" in captured.out
+    assert "[x]idea" in captured.out
+    assert "[x]prd" in captured.out
+    assert "[x]prd-plus" in captured.out
 
 
 def test_status_progress_bar_format(setup_project: Path, capsys):
@@ -102,4 +102,4 @@ def test_status_progress_bar_format(setup_project: Path, capsys):
 
     captured = capsys.readouterr()
     # Check separator is used
-    assert "▸" in captured.out
+    assert ">" in captured.out

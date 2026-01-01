@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from ai_sdlc.constants import CONFIG_FILE
+
 
 class AisdlcError(Exception):
     """Base exception for all ai-sdlc errors."""
@@ -14,29 +16,40 @@ class AisdlcError(Exception):
 
 
 class ConfigError(AisdlcError):
-    """Configuration-related errors (.aisdlc not found, corrupted, etc.)."""
+    """Configuration-related errors (config not found, corrupted, etc.)."""
 
     pass
 
 
 class ConfigNotFoundError(ConfigError):
-    """Raised when .aisdlc config file is not found."""
+    """Raised when config file is not found."""
 
     def __init__(self) -> None:
         super().__init__(
-            "Config file .aisdlc not found. "
+            f"Config file {CONFIG_FILE} not found. "
             "Ensure you are in an ai-sdlc project directory.\n"
             "Run `aisdlc init` to initialize a new project."
         )
 
 
 class ConfigCorruptedError(ConfigError):
-    """Raised when .aisdlc config file is corrupted."""
+    """Raised when config file is corrupted."""
 
     def __init__(self, details: str) -> None:
         super().__init__(
-            f"Config file .aisdlc is corrupted: {details}\n"
+            f"Config file {CONFIG_FILE} is corrupted: {details}\n"
             "Please fix the file or run `aisdlc init` in a new directory."
+        )
+
+
+class ConfigInvalidError(ConfigError):
+    """Raised when config is missing required keys or has invalid types."""
+
+    def __init__(self, errors: list[str]) -> None:
+        error_list = "\n  - ".join(errors)
+        super().__init__(
+            f"Config file {CONFIG_FILE} is invalid:\n  - {error_list}\n"
+            "Please fix the file or run `aisdlc init` to create a valid config."
         )
 
 
@@ -90,6 +103,16 @@ class MissingStepFilesError(FileError):
 
     def __init__(self, missing: list[str]) -> None:
         super().__init__(f"Missing step files: {', '.join(missing)}")
+
+
+class EmptyStepFileError(FileError):
+    """Raised when a step file exists but is empty."""
+
+    def __init__(self, path: str) -> None:
+        super().__init__(
+            f"Step file is empty: {path}\n"
+            "Please add content before advancing to the next step."
+        )
 
 
 class FileWriteError(FileError):

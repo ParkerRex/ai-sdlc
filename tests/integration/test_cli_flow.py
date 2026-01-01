@@ -59,13 +59,8 @@ def test_full_lifecycle_flow(temp_project_dir: Path, mocker):
 
     # To make the test robust against changes in default .aisdlc,
     # we should parse the .aisdlc file that `init` creates.
-    try:
-        import tomllib as toml_loader  # Python 3.11+
-    except ModuleNotFoundError:
-        import tomli as toml_loader  # Fallback for older Python
-
     aisdlc_config_content = (temp_project_dir / ".aisdlc").read_text()
-    aisdlc_config = toml_loader.loads(aisdlc_config_content)
+    aisdlc_config = json.loads(aisdlc_config_content)
     test_steps = aisdlc_config["steps"]  # Use actual steps from scaffolded config
 
     # 2. Run new command

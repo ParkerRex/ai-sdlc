@@ -9,7 +9,13 @@ import unicodedata
 from pathlib import Path
 from typing import Any
 
-from .exceptions import ConfigCorruptedError, ConfigNotFoundError
+from .constants import CONFIG_FILE, LOCK_FILE
+from .exceptions import (
+    ConfigCorruptedError,
+    ConfigInvalidError,
+    ConfigNotFoundError,
+    EmptyStepFileError,
+)
 
 _root_cache: Path | None = None
 
@@ -23,10 +29,10 @@ def get_root() -> Path:
 
 
 def _find_project_root() -> Path:
-    """Find project root by searching for .aisdlc file in current and parent directories."""
+    """Find project root by searching for config file in current and parent directories."""
     current_dir = Path.cwd()
     for parent in [current_dir] + list(current_dir.parents):
-        if (parent / ".aisdlc").exists():
+        if (parent / CONFIG_FILE).exists():
             return parent
     return current_dir
 
@@ -37,11 +43,41 @@ def reset_root(path: Path | None = None) -> None:
     _root_cache = path
 
 
-# --- TOML loader (Python >=3.11 stdlib) --------------------------------------
-try:
-    import tomllib as _toml  # Python 3.11+
-except ModuleNotFoundError:  # pragma: no cover - fallback for < 3.11
-    import tomli as _toml  # type: ignore[import-not-found,no-redef]
+# Required config keys and their expected types
+_REQUIRED_CONFIG = {
+    "steps": list,
+    "active_dir": str,
+    "prompt_dir": str,
+    "done_dir": str,
+}
+
+
+def _validate_config(config: dict[str, Any]) -> None:
+    """Validate that config has all required keys with correct types.
+
+    Raises:
+        ConfigInvalidError: If required keys are missing or have wrong types.
+    """
+    errors: list[str] = []
+
+    for key, expected_type in _REQUIRED_CONFIG.items():
+        if key not in config:
+            errors.append(f"Missing required key '{key}'")
+        elif not isinstance(config[key], expected_type):
+            actual_type = type(config[key]).__name__
+            errors.append(
+                f"Key '{key}' must be {expected_type.__name__}, got {actual_type}"
+            )
+
+    # Additional validation for steps
+    if "steps" in config and isinstance(config["steps"], list):
+        if len(config["steps"]) == 0:
+            errors.append("'steps' must contain at least one step")
+        elif not all(isinstance(s, str) for s in config["steps"]):
+            errors.append("'steps' must be a list of strings")
+
+    if errors:
+        raise ConfigInvalidError(errors)
 
 
 def load_config() -> dict[str, Any]:
@@ -49,15 +85,19 @@ def load_config() -> dict[str, Any]:
 
     Raises:
         ConfigNotFoundError: If .aisdlc file doesn't exist.
-        ConfigCorruptedError: If .aisdlc file contains invalid TOML.
+        ConfigCorruptedError: If .aisdlc file contains invalid JSON.
+        ConfigInvalidError: If required keys are missing or have wrong types.
     """
-    cfg_path = get_root() / ".aisdlc"
+    cfg_path = get_root() / CONFIG_FILE
     if not cfg_path.exists():
         raise ConfigNotFoundError()
     try:
-        return _toml.loads(cfg_path.read_text())
-    except _toml.TOMLDecodeError as e:
+        config = json.loads(cfg_path.read_text())
+    except json.JSONDecodeError as e:
         raise ConfigCorruptedError(str(e)) from e
+
+    _validate_config(config)
+    return config
 
 
 def slugify(text: str) -> str:
@@ -68,12 +108,12 @@ def slugify(text: str) -> str:
 
 
 def read_lock() -> dict[str, Any]:
-    """Read the .aisdlc.lock file.
+    """Read the lock file.
 
     Returns an empty dict if the file doesn't exist or is corrupted.
     Corrupted lock files log a warning but don't raise exceptions.
     """
-    path = get_root() / ".aisdlc.lock"
+    path = get_root() / LOCK_FILE
     if not path.exists():
         return {}
     try:
@@ -81,15 +121,15 @@ def read_lock() -> dict[str, Any]:
     except json.JSONDecodeError:
         # Lock file corruption is recoverable - just treat as empty
         print(
-            "Warning: .aisdlc.lock is corrupted. Treating as empty.",
+            f"Warning: {LOCK_FILE} is corrupted. Treating as empty.",
             file=sys.stderr,
         )
         return {}
 
 
 def write_lock(data: dict[str, Any]) -> None:
-    """Write data to the .aisdlc.lock file."""
-    (get_root() / ".aisdlc.lock").write_text(json.dumps(data, indent=2))
+    """Write data to the lock file."""
+    (get_root() / LOCK_FILE).write_text(json.dumps(data, indent=2))
 
 
 def render_step_bar(steps: list[str], current_index: int) -> str:
@@ -102,7 +142,18 @@ def render_step_bar(steps: list[str], current_index: int) -> str:
     Returns:
         A formatted string like "done idea > done design > pending build"
     """
-    return " ▸ ".join(
-        ("✅" if i <= current_index else "☐") + s.split(".", 1)[1]
+    return " > ".join(
+        ("[x]" if i <= current_index else "[ ]") + s.split(".", 1)[1]
         for i, s in enumerate(steps)
     )
+
+
+def validate_step_file(path: Path) -> None:
+    """Validate that a step file has content.
+
+    Raises:
+        EmptyStepFileError: If the file is empty or whitespace-only.
+    """
+    content = path.read_text()
+    if not content.strip():
+        raise EmptyStepFileError(str(path))

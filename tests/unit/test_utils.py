@@ -15,11 +15,13 @@ def test_slugify():
 
 
 def test_load_config_success(temp_project_dir: Path):
-    mock_aisdlc_content = """
-    version = "0.1.0"
-    steps = ["0.idea", "1.prd"]
-    prompt_dir = "prompts"
-    """
+    mock_aisdlc_content = json.dumps({
+        "version": "0.1.0",
+        "steps": ["0.idea", "1.prd"],
+        "prompt_dir": "prompts",
+        "active_dir": "doing",
+        "done_dir": "done"
+    })
     aisdlc_file = temp_project_dir / ".aisdlc"
     aisdlc_file.write_text(mock_aisdlc_content)
 
@@ -43,7 +45,7 @@ def test_load_config_missing(temp_project_dir: Path):
 
 def test_load_config_corrupted(temp_project_dir: Path):
     aisdlc_file = temp_project_dir / ".aisdlc"
-    aisdlc_file.write_text("this is not valid toml content {")  # Corrupted TOML
+    aisdlc_file.write_text("this is not valid json {")  # Corrupted JSON
 
     utils.reset_root(temp_project_dir)
     try:

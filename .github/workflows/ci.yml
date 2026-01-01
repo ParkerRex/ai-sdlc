@@ -94,7 +94,7 @@ jobs:
           test -f prompts/0.idea.instructions.md
           test -f prompts/1.prd.instructions.md
 
-          echo "✅ CLI integration test passed"
+          echo "OK: CLI integration test passed"
 
   security:
     runs-on: ubuntu-latest

@@ -6,20 +6,23 @@ from pathlib import Path
 import pytest
 
 from ai_sdlc import utils
-from ai_sdlc.commands.next import PLACEHOLDER, run_next
+from ai_sdlc.commands.next import run_next
 from ai_sdlc.exceptions import MissingFileError, NoActiveWorkstreamError
+
+# Get the placeholder from wherever it's defined
+PLACEHOLDER = "<prev_step></prev_step>"
 
 
 @pytest.fixture
 def setup_project(temp_project_dir: Path):
     """Set up a project with config, prompts, and active workstream."""
-    config_content = """
-version = "0.1.0"
-steps = ["0.idea", "1.prd", "2.prd-plus"]
-prompt_dir = "prompts"
-active_dir = "doing"
-done_dir = "done"
-"""
+    config_content = json.dumps({
+        "version": "0.1.0",
+        "steps": ["0.idea", "1.prd", "2.prd-plus"],
+        "prompt_dir": "prompts",
+        "active_dir": "doing",
+        "done_dir": "done"
+    })
     (temp_project_dir / ".aisdlc").write_text(config_content)
     (temp_project_dir / "doing").mkdir()
     (temp_project_dir / "done").mkdir()
