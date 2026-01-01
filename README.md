@@ -4,7 +4,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/ai-sdlc.svg)](https://pypi.org/project/ai-sdlc/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ParkerRex/ai-sdlc/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.13+-blue.svg)](https://python.org)
+[![Python version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
 
 ```bash
 uv pip install ai-sdlc
@@ -145,7 +145,7 @@ All state is tracked in files:
 
 ### Prerequisites
 
-- Python 3.13+
+- Python 3.11+
 - uv (recommended) or pip
 
 ### Install Options
@@ -192,7 +192,7 @@ uv run pytest tests/integration/ # Integration tests only
 
 | Component | Technology |
 |-----------|------------|
-| CLI | Python 3.13+, argparse (stdlib) |
+| CLI | Python 3.11+, argparse (stdlib) |
 | Package manager | uv |
 | Dev tools | Ruff, Pyright, pytest |
 | Build | setuptools, PEP 621 |
