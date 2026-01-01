@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 
+### Technical Improvements
+
+## [0.7.0] - 2026-01-01
+
+### Bug Fixes
+
 - **Step file validation**: `aisdlc next` now validates that step files have content before advancing
   - Empty or whitespace-only files are rejected with a clear error message
   - Prevents accidentally advancing through steps with empty files

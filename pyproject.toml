@@ -9,7 +9,7 @@ build-backend = "hatchling.build"
 # ────────────────────────────────────────────────────────────────
 [project]
 name = "ai-sdlc"
-version = "0.6.3"
+version = "0.7.0"
 description = "Markdown-driven SDLC with AI agent chaining."
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{ name = "Parker Rex", email = "me@parkerrex.com" }]
@@ -66,6 +66,12 @@ dev = [
     # Security
     "bandit>=1.7.0",
     "safety>=2.0.0",
+
+    # Explicit upgrades to address known vulnerabilities in dev envs
+    "authlib>=1.6.5",
+    "regex>=2025.2.10",
+    "requests>=2.32.4",
+    "urllib3>=2.5.0",
 
     # Build tools
     "build>=0.10.0",

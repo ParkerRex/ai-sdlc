@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(uv run python:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv pip install:*)",
+      "Bash(uv run:*)",
+      "Bash(wc:*)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc log --oneline -5)",
+      "Bash(find:*)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc diff)",
+      "Bash(for f in 0.idea 1.prd 2.prd-plus 3.system-template 4.systems-patterns 5.tasks 6.tasks-plus 7.tests)",
+      "Bash(do ln -s \"../../../prompts/$f.instructions.md\" \"/Users/parkerrex/Developer/ai-sdlc/ai_sdlc/scaffold_template/prompts/$f.instructions.md\")",
+      "Bash(done)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
+      "Bash(unzip:*)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc status --short)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc diff --stat ai_sdlc/scaffold_template/prompts/)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc add:*)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc commit -m \"$\\(cat <<''EOF''\nrefactor: replace scaffold prompts with symlinks to root prompts\n\nSingle source of truth for prompt templates. The root prompts/\ndirectory is now authoritative; scaffold_template/prompts/ contains\nsymlinks that hatchling dereferences during wheel build.\n\nThx Claude\nEOF\n\\)\")",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc push)",
+      "Bash(python:*)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc diff ai_sdlc/cli.py ai_sdlc/commands/done.py ai_sdlc/commands/init.py ai_sdlc/commands/next.py ai_sdlc/commands/status.py)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc diff --name-only)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc commit -m \"$\\(cat <<''EOF''\nrefactor: add strict type hints to CLI and command handlers\n\n- Replace Callable[..., None] with specific CommandHandler type alias\n- Change args: object to args: argparse.Namespace | None in all handlers\n- Add Traversable type hint for _discover_prompt_files parameter\n- Remove type: ignore comments by using proper typing\n\nThx Claude\nEOF\n\\)\")",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc stash:*)",
+      "Bash(git -C /Users/parkerrex/Developer/ai-sdlc diff ai_sdlc/utils.py)"
+    ]
+  }
+}

@@ -45,10 +45,11 @@ def _display_compact_status() -> None:
             )
     except ConfigError:
         # Config missing - silently skip status display
-        pass
-    except Exception:
-        # Other errors - silently skip status display
-        pass
+        return
+    except Exception as exc:
+        # Avoid masking unexpected errors while keeping CLI usable.
+        print(f"Warning: unable to display status ({exc})", file=sys.stderr)
+        return
 
 
 def _create_parser() -> argparse.ArgumentParser:
