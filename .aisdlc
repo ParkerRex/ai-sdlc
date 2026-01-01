@@ -2,14 +2,14 @@ version = "0.1.0"
 
 # ordered lifecycle steps
 steps = [
-  "0-idea",
-  "1-prd",
-  "2-prd-plus",
-  "3-system-template",
-  "4-systems-patterns",
-  "5-tasks",
-  "6-tasks-plus",
-  "7-tests"
+  "0.idea",
+  "1.prd",
+  "2.prd-plus",
+  "3.system-template",
+  "4.systems-patterns",
+  "5.tasks",
+  "6.tasks-plus",
+  "7.tests"
 ]
 
 slug_rule    = "kebab-case"
@@ -21,8 +21,8 @@ done_dir     = "done"
 [mermaid]
 graph = """
 flowchart TD
-  I[0-idea]-->P1[1-prd]-->P2[2-prd-plus]-->A[3-system-template]
-  A-->SP[4-systems-patterns]-->T[5-tasks]-->TP[6-tasks-plus]-->TESTS[7-tests]
+  I[0.idea]-->P1[1.prd]-->P2[2.prd-plus]-->A[3.system-template]
+  A-->SP[4.systems-patterns]-->T[5.tasks]-->TP[6.tasks-plus]-->TESTS[7.tests]
 
   %% Iteration loop for steps 1-5
   CHAT[💬 Iterate with AI Chat]

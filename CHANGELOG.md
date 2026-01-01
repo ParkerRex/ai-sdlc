@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### 🔧 Development
+### 🔧 Technical Improvements
 
-- No unreleased changes yet
+- **Unified step naming convention**: Config steps now use dot format (`0.idea`, `1.prd`) matching prompt filenames, eliminating fragile string parsing scattered across multiple files and making the mapping between config and files explicit and consistent.
 
 ## [0.6.3] - 2025-01-20
 
@@ -126,7 +126,7 @@ Existing projects will continue to work, but to use the new naming convention:
 - **Removed Cursor dependency**: AI-SDLC no longer requires Cursor or any specific AI tool
 - **New prompt-based workflow**: `aisdlc next` now generates prompt files instead of calling AI agents directly
 - **Updated file naming**: Prompt files now use `.instructions.md` extension (e.g., `0.idea.instructions.md`)
-- **Simplified step names**: Steps now use single digits (e.g., `0-idea`, `1-prd`) instead of zero-padded numbers
+- **Simplified step names**: Steps now use single digits with dot separators (e.g., `0.idea`, `1.prd`) instead of zero-padded numbers
 
 ### ✨ New Features
 
@@ -159,7 +159,7 @@ Existing projects will continue to work, but to use the new naming convention:
 Existing projects will continue to work, but to take advantage of the new features:
 
 1. **Update prompt files**: Rename your prompt files to use the new `.instructions.md` convention
-2. **Update step references**: Change step names from `01-idea` to `0-idea` format in any custom scripts
+2. **Update step references**: Change step names from `01-idea` to `0.idea` format in any custom scripts
 3. **Choose your AI tool**: Use the generated prompts with your preferred AI assistant
 
 ### 🎉 Benefits

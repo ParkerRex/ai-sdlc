@@ -49,7 +49,7 @@ Getting Started:
     `aisdlc new "Your Awesome Feature Title"`
 
 2.  Open and fill in the first Markdown file created in the `doing/your-awesome-feature-title/` directory
-    (e.g., `doing/your-awesome-feature-title/0-idea-your-awesome-feature-title.md`).
+    (e.g., `doing/your-awesome-feature-title/0.idea-your-awesome-feature-title.md`).
 
 3.  Advance to the next step (AI-SDLC will generate a prompt for your AI tool):
     `aisdlc next`
@@ -77,7 +77,7 @@ PROMPT_FILE_NAMES = [
 ]
 
 
-def run_init() -> None:
+def run_init(args: object = None) -> None:
     """Scaffold AI-SDLC project: .aisdlc, prompts/, doing/, done/, .aisdlc.lock and print instructions."""
     print("Initializing AI-SDLC project...")
 

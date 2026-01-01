@@ -2,23 +2,20 @@
 
 from __future__ import annotations
 
+import argparse
 import datetime
 import sys
 
 from ai_sdlc.utils import ROOT, load_config, slugify, write_lock
 
 
-def run_new(args: list[str]) -> None:
+def run_new(args: argparse.Namespace) -> None:
     """Create the work-stream folder and first markdown file."""
-    if not args:
-        print('Usage: aisdlc new "Idea title"')
-        sys.exit(1)
-
     # Load configuration to get the first step
     config = load_config()
     first_step = config["steps"][0]
 
-    idea_text = " ".join(args)
+    idea_text = " ".join(args.title)
     slug = slugify(idea_text)
 
     workdir = ROOT / "doing" / slug

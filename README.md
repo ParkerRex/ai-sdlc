@@ -64,7 +64,7 @@ aisdlc status
 
 ### 4. Work Through the Steps
 
-1. Fill out the generated markdown in `doing/add-user-authentication-system/0-idea-*.md`
+1. Fill out the generated markdown in `doing/add-user-authentication-system/0.idea-*.md`
 2. Run `aisdlc next` to generate a prompt for the next step
 3. Use the prompt with your AI tool and save the response
 4. Repeat until all 8 steps complete
@@ -73,7 +73,7 @@ aisdlc status
 ## The 8-Step Workflow
 
 ```
-01-idea → 02-prd → 03-prd-plus → 04-architecture → 05-system-patterns → 06-tasks → 07-tasks-plus → 08-tests
+0.idea → 1.prd → 2.prd-plus → 3.system-template → 4.systems-patterns → 5.tasks → 6.tasks-plus → 7.tests
 ```
 
 | Step | Name | Purpose |
