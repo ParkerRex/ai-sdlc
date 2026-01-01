@@ -22,12 +22,8 @@ def run_aisdlc_command(cwd: Path, *args):
 
 def test_full_lifecycle_flow(temp_project_dir: Path, mocker):
     """Test the entire aisdlc workflow from init through next to done."""
-
-    # Patch ROOT to point to our temp directory for all utils functions
-    mocker.patch("ai_sdlc.utils.ROOT", temp_project_dir)
-    mocker.patch("ai_sdlc.commands.new.ROOT", temp_project_dir)
-    mocker.patch("ai_sdlc.commands.next.ROOT", temp_project_dir)
-    mocker.patch("ai_sdlc.commands.done.ROOT", temp_project_dir)
+    # Note: Commands run in subprocess with cwd=temp_project_dir, so they
+    # automatically find .aisdlc in the correct location. No patching needed.
 
     # 1. Run init command
     # This will now create .aisdlc, prompts/, doing/, done/, .aisdlc.lock

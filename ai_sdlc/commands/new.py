@@ -6,7 +6,7 @@ import argparse
 import datetime
 import sys
 
-from ai_sdlc.utils import ROOT, load_config, slugify, write_lock
+from ai_sdlc.utils import get_root, load_config, slugify, write_lock
 
 
 def run_new(args: argparse.Namespace) -> None:
@@ -18,7 +18,7 @@ def run_new(args: argparse.Namespace) -> None:
     idea_text = " ".join(args.title)
     slug = slugify(idea_text)
 
-    workdir = ROOT / "doing" / slug
+    workdir = get_root() / "doing" / slug
     if workdir.exists():
         print(f"❌  Work-stream '{slug}' already exists.")
         sys.exit(1)

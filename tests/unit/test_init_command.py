@@ -4,7 +4,8 @@ from ai_sdlc.commands import init
 
 
 def test_run_init(temp_project_dir: Path, mocker):
-    mocker.patch("ai_sdlc.utils.ROOT", temp_project_dir)
+    # Mock Path.cwd() to return our temp directory
+    mocker.patch.object(Path, "cwd", return_value=temp_project_dir)
 
     # Mock any directory operations to prevent actual file system changes
     mocker.patch.object(Path, "mkdir")

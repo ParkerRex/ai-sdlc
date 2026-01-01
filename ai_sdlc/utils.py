@@ -10,18 +10,30 @@ from pathlib import Path
 from typing import Any
 
 
-def find_project_root() -> Path:
+_root_cache: Path | None = None
+
+
+def get_root() -> Path:
+    """Get project root lazily, caching result after first call."""
+    global _root_cache
+    if _root_cache is None:
+        _root_cache = _find_project_root()
+    return _root_cache
+
+
+def _find_project_root() -> Path:
     """Find project root by searching for .aisdlc file in current and parent directories."""
     current_dir = Path.cwd()
     for parent in [current_dir] + list(current_dir.parents):
         if (parent / ".aisdlc").exists():
             return parent
-    # For init command, return current directory if no .aisdlc found
-    # Other commands will check for .aisdlc existence separately
     return current_dir
 
 
-ROOT = find_project_root()
+def reset_root(path: Path | None = None) -> None:
+    """Reset root cache. For testing or when changing directories."""
+    global _root_cache
+    _root_cache = path
 
 # --- TOML loader (Python ≥3.11 stdlib) --------------------------------------
 try:
@@ -31,7 +43,7 @@ except ModuleNotFoundError:  # pragma: no cover – fallback for < 3.11
 
 
 def load_config() -> dict[str, Any]:
-    cfg_path = ROOT / ".aisdlc"
+    cfg_path = get_root() / ".aisdlc"
     if not cfg_path.exists():
         print(
             "Error: .aisdlc not found. Ensure you are in an ai-sdlc project directory."
@@ -54,7 +66,7 @@ def slugify(text: str) -> str:
 
 
 def read_lock() -> dict[str, Any]:
-    path = ROOT / ".aisdlc.lock"
+    path = get_root() / ".aisdlc.lock"
     if not path.exists():
         return {}
     try:
@@ -67,4 +79,4 @@ def read_lock() -> dict[str, Any]:
 
 
 def write_lock(data: dict[str, Any]) -> None:
-    (ROOT / ".aisdlc.lock").write_text(json.dumps(data, indent=2))
+    (get_root() / ".aisdlc.lock").write_text(json.dumps(data, indent=2))

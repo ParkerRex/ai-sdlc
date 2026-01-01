@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from ai_sdlc.utils import ROOT, load_config, read_lock, write_lock
+from ai_sdlc.utils import get_root, load_config, read_lock, write_lock
 
 PLACEHOLDER = "<prev_step></prev_step>"
 
@@ -27,9 +27,10 @@ def run_next(args: object = None) -> None:
     prev_step = steps[idx]
     next_step = steps[idx + 1]
 
-    workdir = ROOT / conf["active_dir"] / slug
+    root = get_root()
+    workdir = root / conf["active_dir"] / slug
     prev_file = workdir / f"{prev_step}-{slug}.md"
-    prompt_file = ROOT / conf["prompt_dir"] / f"{next_step}.instructions.md"
+    prompt_file = root / conf["prompt_dir"] / f"{next_step}.instructions.md"
     next_file = workdir / f"{next_step}-{slug}.md"
 
     if not prev_file.exists():

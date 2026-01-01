@@ -65,16 +65,19 @@ Getting Started:
     `aisdlc status`
 """
 
-PROMPT_FILE_NAMES = [
-    "0.idea.instructions.md",
-    "1.prd.instructions.md",
-    "2.prd-plus.instructions.md",
-    "3.system-template.instructions.md",
-    "4.systems-patterns.instructions.md",
-    "5.tasks.instructions.md",
-    "6.tasks-plus.instructions.md",
-    "7.tests.instructions.md",
-]
+
+def _discover_prompt_files(prompt_dir) -> list[str]:
+    """Discover all .instructions.md files from the scaffold template prompts directory."""
+    prompt_files = []
+    try:
+        for item in prompt_dir.iterdir():
+            name = item.name
+            if name.endswith(".instructions.md"):
+                prompt_files.append(name)
+    except (TypeError, AttributeError):
+        # Fallback for older Python or different resource types
+        pass
+    return sorted(prompt_files)
 
 
 def run_init(args: object = None) -> None:
@@ -88,6 +91,11 @@ def run_init(args: object = None) -> None:
         scaffold_dir = pkg_resources.files("ai_sdlc").joinpath("scaffold_template")
         default_config_content = scaffold_dir.joinpath(".aisdlc").read_text()
         prompt_files_source_dir = scaffold_dir.joinpath("prompts")
+        prompt_file_names = _discover_prompt_files(prompt_files_source_dir)
+        if not prompt_file_names:
+            print(
+                "⚠️ Warning: No prompt templates found in the ai-sdlc package scaffold."
+            )
     except Exception as e:
         print(
             f"❌ Critical Error: Could not load scaffold templates from the ai-sdlc package: {e}"
@@ -129,7 +137,7 @@ def run_init(args: object = None) -> None:
     # Copy prompt templates
     print("✨ Setting up prompt templates...")
     all_prompts_exist = True
-    for fname in PROMPT_FILE_NAMES:
+    for fname in prompt_file_names:
         target_file = prompts_target_dir / fname
         if not target_file.exists():
             try:
@@ -149,7 +157,7 @@ def run_init(args: object = None) -> None:
             # print(f"  - Prompt {target_file.relative_to(Path.cwd())} already exists, skipping.")
             pass
     if all_prompts_exist and all(
-        (prompts_target_dir / fname).exists() for fname in PROMPT_FILE_NAMES
+        (prompts_target_dir / fname).exists() for fname in prompt_file_names
     ):
         print(
             f"  👍 All prompt templates are set up in {prompts_target_dir.relative_to(Path.cwd())}."

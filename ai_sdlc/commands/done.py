@@ -3,7 +3,7 @@
 import shutil
 import sys
 
-from ai_sdlc.utils import ROOT, load_config, read_lock, write_lock
+from ai_sdlc.utils import get_root, load_config, read_lock, write_lock
 
 
 def run_done(args: object = None) -> None:
@@ -17,12 +17,13 @@ def run_done(args: object = None) -> None:
     if lock["current"] != steps[-1]:
         print("❌  Workstream not finished yet. Complete all steps before archiving.")
         return
-    workdir = ROOT / conf["active_dir"] / slug
+    root = get_root()
+    workdir = root / conf["active_dir"] / slug
     missing = [s for s in steps if not (workdir / f"{s}-{slug}.md").exists()]
     if missing:
         print("❌  Missing files:", ", ".join(missing))
         return
-    dest = ROOT / conf["done_dir"] / slug
+    dest = root / conf["done_dir"] / slug
     try:
         shutil.move(str(workdir), dest)
         write_lock({})
