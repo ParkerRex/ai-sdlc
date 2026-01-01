@@ -1,5 +1,8 @@
 """`aisdlc done` – validate finished stream and archive it."""
 
+from __future__ import annotations
+
+import argparse
 import shutil
 
 from ai_sdlc.exceptions import (
@@ -11,7 +14,7 @@ from ai_sdlc.exceptions import (
 from ai_sdlc.utils import get_root, load_config, read_lock, write_lock
 
 
-def run_done(args: object = None) -> None:
+def run_done(args: argparse.Namespace | None = None) -> None:
     """Validate and archive a completed workstream.
 
     Raises:

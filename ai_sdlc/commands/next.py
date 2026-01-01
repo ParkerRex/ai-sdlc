@@ -2,18 +2,24 @@
 
 from __future__ import annotations
 
-from ai_sdlc.exceptions import MissingFileError, NoActiveWorkstreamError
-from ai_sdlc.utils import get_root, load_config, read_lock, write_lock
+import argparse
 
-PLACEHOLDER = "<prev_step></prev_step>"
+from ai_sdlc.constants import PREV_STEP_PLACEHOLDER
+from ai_sdlc.exceptions import (
+    EmptyStepFileError,
+    MissingFileError,
+    NoActiveWorkstreamError,
+)
+from ai_sdlc.utils import get_root, load_config, read_lock, validate_step_file, write_lock
 
 
-def run_next(args: object = None) -> None:
+def run_next(args: argparse.Namespace | None = None) -> None:
     """Generate the prompt for the next lifecycle step.
 
     Raises:
         NoActiveWorkstreamError: If no workstream is active.
         MissingFileError: If required files are missing.
+        EmptyStepFileError: If step file exists but is empty.
     """
     conf = load_config()
     steps = conf["steps"]
@@ -55,7 +61,7 @@ def run_next(args: object = None) -> None:
     print(f"Reading prompt template from: {prompt_file}")
     prompt_template_content = prompt_file.read_text()
 
-    merged_prompt = prompt_template_content.replace(PLACEHOLDER, prev_step_content)
+    merged_prompt = prompt_template_content.replace(PREV_STEP_PLACEHOLDER, prev_step_content)
 
     # Create a prompt file for the user to use with their preferred AI tool
     prompt_output_file = workdir / f"_prompt-{next_step}.md"
@@ -79,6 +85,9 @@ def run_next(args: object = None) -> None:
 
     # Check if the user has already created the next step file
     if next_file.exists():
+        # Validate file has content before advancing
+        validate_step_file(next_file)
+
         print(f"Found existing file: {next_file}")
         print("Proceeding to update the workflow state...")
 

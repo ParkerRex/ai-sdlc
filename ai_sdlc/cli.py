@@ -6,20 +6,21 @@ from __future__ import annotations
 import argparse
 import sys
 from importlib import import_module
-from typing import TYPE_CHECKING
+from collections.abc import Callable
 
 from .exceptions import AisdlcError, ConfigError
 from .utils import load_config, read_lock, render_step_bar
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
+#: Type alias for command handler functions
+CommandHandler = Callable[[argparse.Namespace], None]
 
 
-def _resolve(dotted: str) -> Callable[..., None]:
+def _resolve(dotted: str) -> "CommandHandler":
     """Import `"module:function"` and return the function object."""
     module_name, func_name = dotted.split(":")
     module = import_module(module_name)
-    return getattr(module, func_name)  # type: ignore[no-any-return]
+    func: CommandHandler = getattr(module, func_name)
+    return func
 
 
 def _display_compact_status() -> None:

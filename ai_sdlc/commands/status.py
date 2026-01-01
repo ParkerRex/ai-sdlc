@@ -1,10 +1,14 @@
 # ai_sdlc/commands/status.py
 """`aisdlc status` – show progress through lifecycle steps."""
 
+from __future__ import annotations
+
+import argparse
+
 from ai_sdlc.utils import load_config, read_lock, render_step_bar
 
 
-def run_status(args: object = None) -> None:
+def run_status(args: argparse.Namespace | None = None) -> None:
     conf = load_config()
     steps = conf["steps"]
     lock = read_lock()
