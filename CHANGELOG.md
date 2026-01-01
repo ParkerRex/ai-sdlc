@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🔧 Technical Improvements
 
+- **Proper CLI argument parsing**: Replaced manual `sys.argv` parsing with `argparse` using subparsers
+  - Each command now has its own `--help` with detailed descriptions
+  - `aisdlc --help` shows all available commands
+  - `aisdlc <command> --help` shows command-specific help
+  - Foundation for adding future flags like `--verbose`, `--force`, or `--template`
 - **Unified step naming convention**: Config steps now use dot format (`0.idea`, `1.prd`) matching prompt filenames, eliminating fragile string parsing scattered across multiple files and making the mapping between config and files explicit and consistent.
 
 ## [0.6.3] - 2025-01-20

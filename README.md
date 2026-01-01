@@ -104,7 +104,8 @@ aisdlc status
 | `aisdlc next` | Generate prompt for next step |
 | `aisdlc status` | Show current project status |
 | `aisdlc done` | Archive completed feature to done/ |
-| `aisdlc --help` | Show help |
+| `aisdlc --help` | Show all available commands |
+| `aisdlc <command> --help` | Show help for a specific command |
 
 ## How It Works
 
