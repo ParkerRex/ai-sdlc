@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Improved project root detection**: Refactored `ROOT` constant to `get_root()` function
   - Lazy evaluation with caching for better performance
   - `reset_root()` API for testing without monkey-patching
+- **Comprehensive unit tests**: Added tests for all commands with edge case coverage (32 tests total)
+  - Tests for `new`, `next`, `done`, `status` commands
+  - Edge cases: missing files, workstream conflicts, step progression, archive validation
 
 ## [0.6.3] - 2025-01-20
 
