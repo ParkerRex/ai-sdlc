@@ -66,7 +66,9 @@ def run_next(args: argparse.Namespace | None = None) -> None:
     print(f"Reading prompt template from: {prompt_file}")
     prompt_template_content = prompt_file.read_text()
 
-    merged_prompt = prompt_template_content.replace(PREV_STEP_PLACEHOLDER, prev_step_content)
+    merged_prompt = prompt_template_content.replace(
+        PREV_STEP_PLACEHOLDER, prev_step_content
+    )
 
     # Create a prompt file for the user to use with their preferred AI tool
     prompt_output_file = workdir / f"_prompt-{next_step}.md"

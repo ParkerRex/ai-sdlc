@@ -18,13 +18,15 @@ from ai_sdlc.exceptions import (
 @pytest.fixture
 def setup_project(temp_project_dir: Path):
     """Set up a project with config and directories."""
-    config_content = json.dumps({
-        "version": "0.1.0",
-        "steps": ["0.idea", "1.prd", "2.prd-plus"],
-        "prompt_dir": "prompts",
-        "active_dir": "doing",
-        "done_dir": "done"
-    })
+    config_content = json.dumps(
+        {
+            "version": "0.1.0",
+            "steps": ["0.idea", "1.prd", "2.prd-plus"],
+            "prompt_dir": "prompts",
+            "active_dir": "doing",
+            "done_dir": "done",
+        }
+    )
     (temp_project_dir / ".aisdlc").write_text(config_content)
     (temp_project_dir / "doing").mkdir()
     (temp_project_dir / "done").mkdir()
