@@ -8,7 +8,8 @@ import sys
 from importlib import import_module
 from typing import TYPE_CHECKING
 
-from .utils import load_config, read_lock
+from .exceptions import AisdlcError, ConfigError
+from .utils import load_config, read_lock, render_step_bar
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -35,26 +36,18 @@ def _display_compact_status() -> None:
 
         if current_step_name in steps:
             idx = steps.index(current_step_name)
-            # Steps are in format like "0.idea", take the part after the dot
-            bar = " ▸ ".join(
-                [
-                    ("✅" if i <= idx else "☐") + s.split(".", 1)[1]
-                    for i, s in enumerate(steps)
-                ]
-            )
-            print(f"\n---\n📌 Current: {slug} @ {current_step_name}\n   {bar}\n---")
+            bar = render_step_bar(steps, idx)
+            print(f"\n---\nCurrent: {slug} @ {current_step_name}\n   {bar}\n---")
         else:
             print(
-                f"\n---\n📌 Current: {slug} @ {current_step_name} (Step not in config)\n---"
+                f"\n---\nCurrent: {slug} @ {current_step_name} (Step not in config)\n---"
             )
-    except FileNotFoundError:  # .aisdlc missing
-        print(
-            "\n---\n📌 AI-SDLC config (.aisdlc) not found. Cannot display status.\n---"
-        )
-    except Exception:  # Catch other potential errors during status display
-        print(
-            "\n---\n📌 Could not display current status due to an unexpected issue.\n---"
-        )
+    except ConfigError:
+        # Config missing - silently skip status display
+        pass
+    except Exception:
+        # Other errors - silently skip status display
+        pass
 
 
 def _create_parser() -> argparse.ArgumentParser:
@@ -129,7 +122,12 @@ def main() -> None:  # noqa: D401
         sys.exit(1)
 
     handler = _resolve(args.handler)
-    handler(args)
+
+    try:
+        handler(args)
+    except AisdlcError as e:
+        print(f"Error: {e.message}", file=sys.stderr)
+        sys.exit(e.exit_code)
 
     # Display status after most commands, unless it's status itself or init (before lock exists)
     if args.command not in ["status", "init"]:

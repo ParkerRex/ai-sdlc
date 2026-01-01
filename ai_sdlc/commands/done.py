@@ -1,33 +1,51 @@
 """`aisdlc done` – validate finished stream and archive it."""
 
 import shutil
-import sys
 
+from ai_sdlc.exceptions import (
+    FileWriteError,
+    MissingStepFilesError,
+    NoActiveWorkstreamError,
+    WorkstreamNotFinishedError,
+)
 from ai_sdlc.utils import get_root, load_config, read_lock, write_lock
 
 
 def run_done(args: object = None) -> None:
+    """Validate and archive a completed workstream.
+
+    Raises:
+        NoActiveWorkstreamError: If no workstream is active.
+        WorkstreamNotFinishedError: If workstream hasn't completed all steps.
+        MissingStepFilesError: If required step files are missing.
+        FileWriteError: If archiving fails.
+    """
     conf = load_config()
     steps = conf["steps"]
     lock = read_lock()
+
     if not lock:
-        print("❌  No active workstream.")
-        return
+        raise NoActiveWorkstreamError()
+
     slug = lock["slug"]
     if lock["current"] != steps[-1]:
-        print("❌  Workstream not finished yet. Complete all steps before archiving.")
-        return
+        raise WorkstreamNotFinishedError()
+
     root = get_root()
     workdir = root / conf["active_dir"] / slug
     missing = [s for s in steps if not (workdir / f"{s}-{slug}.md").exists()]
     if missing:
-        print("❌  Missing files:", ", ".join(missing))
-        return
+        raise MissingStepFilesError(missing)
+
     dest = root / conf["done_dir"] / slug
+    if dest.exists():
+        raise FileWriteError(
+            str(dest), "Destination already exists. Remove or rename it first."
+        )
+
     try:
         shutil.move(str(workdir), dest)
         write_lock({})
-        print(f"🎉  Archived to {dest}")
+        print(f"Archived to {dest}")
     except OSError as e:
-        print(f"❌  Error archiving work-stream '{slug}': {e}")
-        sys.exit(1)
+        raise FileWriteError(str(dest), str(e)) from e

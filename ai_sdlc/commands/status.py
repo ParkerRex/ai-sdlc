@@ -1,7 +1,7 @@
 # ai_sdlc/commands/status.py
 """`aisdlc status` – show progress through lifecycle steps."""
 
-from ai_sdlc.utils import load_config, read_lock
+from ai_sdlc.utils import load_config, read_lock, render_step_bar
 
 
 def run_status(args: object = None) -> None:
@@ -15,5 +15,5 @@ def run_status(args: object = None) -> None:
     slug = lock["slug"]
     cur = lock["current"]
     idx = steps.index(cur)
-    bar = " ▸ ".join([("✅" if i <= idx else "☐") + s.split(".", 1)[1] for i, s in enumerate(steps)])
+    bar = render_step_bar(steps, idx)
     print(f"{slug:20} {cur:12} {bar}")

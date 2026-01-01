@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from ai_sdlc import utils
+from ai_sdlc.exceptions import ConfigCorruptedError, ConfigNotFoundError
 
 
 def test_slugify():
@@ -34,19 +35,19 @@ def test_load_config_success(temp_project_dir: Path):
 def test_load_config_missing(temp_project_dir: Path):
     utils.reset_root(temp_project_dir)
     try:
-        with pytest.raises(SystemExit, match="1"):
+        with pytest.raises(ConfigNotFoundError):
             utils.load_config()
     finally:
         utils.reset_root(None)
 
 
-def test_load_config_corrupted(temp_project_dir: Path, mocker):
+def test_load_config_corrupted(temp_project_dir: Path):
     aisdlc_file = temp_project_dir / ".aisdlc"
     aisdlc_file.write_text("this is not valid toml content {")  # Corrupted TOML
 
     utils.reset_root(temp_project_dir)
     try:
-        with pytest.raises(SystemExit):
+        with pytest.raises(ConfigCorruptedError):
             utils.load_config()
     finally:
         utils.reset_root(None)
