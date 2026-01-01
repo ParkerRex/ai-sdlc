@@ -14,7 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `aisdlc --help` shows all available commands
   - `aisdlc <command> --help` shows command-specific help
   - Foundation for adding future flags like `--verbose`, `--force`, or `--template`
+- **Dynamic prompt file discovery**: Removed hardcoded `PROMPT_FILE_NAMES` list
+  - Prompt files are now automatically discovered from `scaffold_template/prompts/`
+  - Adding new prompt files no longer requires updating code
+  - Eliminates sync issues between code and scaffold template
 - **Unified step naming convention**: Config steps now use dot format (`0.idea`, `1.prd`) matching prompt filenames, eliminating fragile string parsing scattered across multiple files and making the mapping between config and files explicit and consistent.
+- **Improved project root detection**: Refactored `ROOT` constant to `get_root()` function
+  - Lazy evaluation with caching for better performance
+  - `reset_root()` API for testing without monkey-patching
 
 ## [0.6.3] - 2025-01-20
 
