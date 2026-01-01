@@ -6,11 +6,16 @@ import argparse
 
 from ai_sdlc.constants import PREV_STEP_PLACEHOLDER
 from ai_sdlc.exceptions import (
-    EmptyStepFileError,
     MissingFileError,
     NoActiveWorkstreamError,
 )
-from ai_sdlc.utils import get_root, load_config, read_lock, validate_step_file, write_lock
+from ai_sdlc.utils import (
+    get_root,
+    load_config,
+    read_lock,
+    validate_step_file,
+    write_lock,
+)
 
 
 def run_next(args: argparse.Namespace | None = None) -> None:

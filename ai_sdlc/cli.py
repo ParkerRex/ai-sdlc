@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import argparse
 import sys
-from importlib import import_module
 from collections.abc import Callable
+from importlib import import_module
 
 from .exceptions import AisdlcError, ConfigError
 from .utils import load_config, read_lock, render_step_bar
@@ -15,7 +15,7 @@ from .utils import load_config, read_lock, render_step_bar
 CommandHandler = Callable[[argparse.Namespace], None]
 
 
-def _resolve(dotted: str) -> "CommandHandler":
+def _resolve(dotted: str) -> CommandHandler:
     """Import `"module:function"` and return the function object."""
     module_name, func_name = dotted.split(":")
     module = import_module(module_name)

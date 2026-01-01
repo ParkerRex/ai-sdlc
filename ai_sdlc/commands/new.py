@@ -37,7 +37,7 @@ def run_new(args: argparse.Namespace) -> None:
             {
                 "slug": slug,
                 "current": first_step,
-                "created": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "created": datetime.datetime.now(datetime.UTC).isoformat(),
             },
         )
         print(f"Created {idea_file}. Fill it out, then run `aisdlc next`.")
