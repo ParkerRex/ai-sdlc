@@ -22,7 +22,7 @@ def run_new(args: argparse.Namespace) -> None:
     idea_text = " ".join(args.title)
     slug = slugify(idea_text)
 
-    workdir = get_root() / "doing" / slug
+    workdir = get_root() / config["active_dir"] / slug
     if workdir.exists():
         raise WorkstreamExistsError(slug)
 
