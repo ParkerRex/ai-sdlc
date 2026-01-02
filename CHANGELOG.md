@@ -11,6 +11,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Technical Improvements
 
+## [0.7.1] - 2026-01-02
+
+### Bug Fixes
+
+- **New command uses config**: `aisdlc new` now respects `active_dir` from config instead of hardcoded `doing`
+- **CLI status handling**: Avoided silent exception masking when rendering compact status
+- **Config typing**: Cast config JSON loads to satisfy mypy return type checks
+
+### Technical Improvements
+
+- **Strict typing**: Added explicit type hints for CLI and command handlers
+- **Prompt scaffolding**: Scaffold prompts now use symlinks to the root prompts
+- **Dev dependency upgrades**: Updated vulnerable security tooling transitive deps for requests/urllib3/authlib/regex
+- **CI stability**: Pinned CI Python version to 3.11
+- **Formatting**: Applied Ruff lint/format fixes to keep tests and commands consistent
+
+### Tests
+
+- **Coverage expansion**: Added comprehensive unit tests for all commands
+
+### Documentation
+
+- **Workflow docs**: Added `AGENTS.md` with local workflow and release guidance
+- **Version docs**: Clarified supported Python version requirement (3.11+)
+- **Changelog maintenance**: Documented exception hierarchy updates
+
 ## [0.7.0] - 2026-01-01
 
 ### Bug Fixes
