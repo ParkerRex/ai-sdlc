@@ -7,7 +7,7 @@ import re
 import sys
 import unicodedata
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from .constants import CONFIG_FILE, LOCK_FILE
 from .exceptions import (
@@ -92,7 +92,7 @@ def load_config() -> dict[str, Any]:
     if not cfg_path.exists():
         raise ConfigNotFoundError()
     try:
-        config = json.loads(cfg_path.read_text())
+        config = cast(dict[str, Any], json.loads(cfg_path.read_text()))
     except json.JSONDecodeError as e:
         raise ConfigCorruptedError(str(e)) from e
 
